@@ -5,7 +5,7 @@
 
 
 import socket
-import threading
+from threading import Thread
 
 
 class Client_Thread(Thread):
@@ -18,14 +18,14 @@ class Client_Thread(Thread):
  
 	def run(self):
 		while True : 
-			message_client = current_connection.recv(1024) 
-			print "Message from client: ", message_client
+			message_client = self.connection.recv(1024) 
+			print "Message from client", self.address, ": ", message_client
 			if message_client == 'quit\r\n':
-				current_connection.shutdown(1)
-				current_connection.close()
+				self.connection.shutdown(1)
+				self.connection.close()
 				break
 			else:
-				current_connection.send(message_client)
+				self.connection.send(message_client)
 
 
 
@@ -33,8 +33,8 @@ if __name__ == '__main__':
 
 
 	server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-	port = 8005
-	server_socket.bind(('10.64.13.131', port))
+	port = 8003
+	server_socket.bind(('127.0.0.1', port))
 	server_socket.listen(1)
 
 	list_threads = []
@@ -42,7 +42,7 @@ if __name__ == '__main__':
 	while True:
 			
 		try:
-			(client_connection, client_address) = server_socket.accept()
+			client_connection, client_address = server_socket.accept()
 			new_client_thread = Client_Thread(client_connection, client_address)
 			new_client_thread.start()
 			list_threads.append(new_client_thread)
