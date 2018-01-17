@@ -3,8 +3,8 @@ import sys
 import threading
 
 
-port = int(sys.argv[1])
-address = sys.argv[0]
+port = int(sys.argv[2])
+address = sys.argv[1]
 s = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
 def thread_receive(s):
 	while(True):

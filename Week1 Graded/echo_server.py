@@ -33,11 +33,9 @@ if __name__ == '__main__':
 
 
 	server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-	port = 8003
+	port = 8006
 	server_socket.bind(('127.0.0.1', port))
 	server_socket.listen(1)
-
-	list_threads = []
 
 	while True:
 			
@@ -45,12 +43,8 @@ if __name__ == '__main__':
 			client_connection, client_address = server_socket.accept()
 			new_client_thread = Client_Thread(client_connection, client_address)
 			new_client_thread.start()
-			list_threads.append(new_client_thread)
 		except socket.error:
 			print "Connection error"
-
-	for threads in list_threads:
-		threads.join()
 
 	print "Server is exiting"
 		
