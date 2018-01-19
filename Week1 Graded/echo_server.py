@@ -18,14 +18,17 @@ class Client_Thread(Thread):
  
 	def run(self):
 		while True : 
-			message_client = self.connection.recv(1024) 
-			print "Message from client", self.address, ": ", message_client
-			if message_client == 'quit\r\n':
-				self.connection.shutdown(1)
-				self.connection.close()
-				break
-			else:
-				self.connection.send(message_client)
+			try:
+				message_client = self.connection.recv(1024) 
+				print "Message from client", self.address, ": ", message_client
+				if message_client == 'quit\r\n':
+					self.connection.shutdown(1)
+					self.connection.close()
+					break
+				else:
+					self.connection.send(message_client)
+			except socket.error:
+				print "Connection error"
 
 
 
@@ -33,7 +36,7 @@ if __name__ == '__main__':
 
 
 	server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-	port = 8006
+	port = 8001
 	server_socket.bind(('127.0.0.1', port))
 	server_socket.listen(1)
 
